@@ -61,7 +61,8 @@ function nextLevel() {
 }
 
 window.addEventListener('keydown', () => {
-	if (!gameRunning) beginGame();
+	if (!gameRunning)
+		setTimeout(beginGame,500);
 });
 
 function beginGame() {
@@ -103,7 +104,7 @@ function checker() {
 	return true;
 }
 
-const timeDelay = 300;
+const timeDelay = 400;
 
 function redListener() {
 	if (gameRunning) {
