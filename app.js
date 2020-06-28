@@ -55,10 +55,8 @@ function nextLevel() {
 	level++;
 	gameHeading.innerText = `Level ${level}`;
 	let color = Math.floor(Math.random() * 4);
-	console.log(color);
 	gameArray.push(color);
 	lastColor = gameArray.Length - 1;
-	console.log(gameArray);
 	clickedFlash(color);
 }
 
@@ -71,11 +69,8 @@ function beginGame() {
 	level = 1;
 	gameHeading.innerText = `Level ${level}`;
 	let color = Math.floor(Math.random() * 4);
-	console.log(color);
 	gameArray.push(color);
 	lastColor = gameArray.Length - 1;
-	console.log('gameArray = ', gameArray);
-	console.log('userSelected = ', userSelected);
 	clickedFlash(color);
 }
 
