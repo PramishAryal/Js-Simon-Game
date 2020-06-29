@@ -1,12 +1,15 @@
-const buttonR = document.querySelector('.buttonR');
-const buttonG = document.querySelector('.buttonG');
-const buttonB = document.querySelector('.buttonB');
-const buttonY = document.querySelector('.buttonY');
 const buttons = document.querySelectorAll('button');
 const gameHeading = document.querySelector('#gameHeading');
+
+//Play again button
 const playAgain = document.createElement('button');
 playAgain.classList.add('playAgain');
 playAgain.innerText = 'Play Again?';
+playAgain.addEventListener('click', () => {
+	location.reload();
+});
+
+//Sounds
 let redSound = new Audio('sounds/red.mp3');
 let greenSound = new Audio('sounds/green.mp3');
 let blueSound = new Audio('sounds/blue.mp3');
@@ -14,7 +17,6 @@ let yellowSound = new Audio('sounds/yellow.mp3');
 let wrong = new Audio('sounds/wrong.mp3');
 
 let level = 0;
-let lastColor = -1;
 
 let sounds = [ redSound, greenSound, blueSound, yellowSound, wrong ];
 //RGBY 0123
@@ -38,66 +40,50 @@ function removal() {
 	document.body.append(playAgain);
 }
 
-buttons[red].addEventListener('click', redListener);
+const timeDelay = 300;
+function listener(event, color) {
+	console.log('clicked');
+	if (gameRunning) {
+		userSelected.push(color);
+		if (!checker()) {
+			wrong.play();
+			removal();
+			return;
+		}
+		clickedFlash(color);
+		if (userSelected.length === level) setTimeout(nextLevel, timeDelay);
+	}
+}
 
-buttons[green].addEventListener('click', greenListener);
+buttons[red].addEventListener('click', listener.bind(null, event, red));
 
-buttons[blue].addEventListener('click', blueListener);
+buttons[green].addEventListener('click', listener.bind(null, event, green));
 
-buttons[yellow].addEventListener('click', yellowListener);
+buttons[blue].addEventListener('click', listener.bind(null, event, blue));
 
-playAgain.addEventListener('click', () => {
-	location.reload();
-});
+buttons[yellow].addEventListener('click', listener.bind(null, event, yellow));
 
-function nextLevel() {
-	userSelected = [];
-	level++;
+function levelLogic() {
+	if (!gameRunning) {
+		gameRunning = true;
+		level = 1;
+	} else {
+		userSelected = [];
+		level++;
+	}
 	gameHeading.innerText = `Level ${level}`;
 	let color = Math.floor(Math.random() * 4);
-	console.log(color);
 	gameArray.push(color);
-	lastColor = gameArray.Length - 1;
-	console.log(gameArray);
 	clickedFlash(color);
 }
 
 window.addEventListener('keydown', () => {
-	if (!gameRunning) beginGame();
+	if (!gameRunning) levelLogic();
 });
 
-function beginGame() {
-	gameRunning = true;
-	level = 1;
-	gameHeading.innerText = `Level ${level}`;
-	let color = Math.floor(Math.random() * 4);
-	console.log(color);
-	gameArray.push(color);
-	lastColor = gameArray.Length - 1;
-	console.log('gameArray = ', gameArray);
-	console.log('userSelected = ', userSelected);
-	clickedFlash(color);
-}
-
 function clickedFlash(color) {
-	switch (color) {
-		case red:
-			buttons[red].classList.toggle(`buttonR`);
-			setTimeout(() => buttons[red].classList.toggle(`buttonR`), 100);
-			break;
-		case green:
-			buttons[green].classList.toggle(`buttonG`);
-			setTimeout(() => buttons[green].classList.toggle(`buttonG`), 100);
-			break;
-		case blue:
-			buttons[blue].classList.toggle(`buttonB`);
-			setTimeout(() => buttons[blue].classList.toggle(`buttonB`), 100);
-			break;
-		case yellow:
-			buttons[yellow].classList.toggle(`buttonY`);
-			setTimeout(() => buttons[yellow].classList.toggle(`buttonY`), 100);
-			break;
-	}
+	buttons[color].classList.toggle('clicked');
+	setTimeout(() => buttons[color].classList.toggle('clicked'), 100);
 	sounds[color].play();
 }
 
@@ -106,56 +92,4 @@ function checker() {
 		if (gameArray[i] !== userSelected[i]) return false;
 	}
 	return true;
-}
-
-const timeDelay = 300;
-
-function redListener() {
-	if (gameRunning) {
-		userSelected.push(red);
-		if (!checker()) {
-			wrong.play();
-			removal();
-			return;
-		}
-		clickedFlash(red);
-		if (userSelected.length === level) setTimeout(nextLevel, timeDelay);
-	}
-}
-
-function greenListener() {
-	if (gameRunning) {
-		userSelected.push(green);
-		if (!checker()) {
-			wrong.play();
-			removal();
-			return;
-		}
-		clickedFlash(green);
-		if (userSelected.length === level) setTimeout(nextLevel, timeDelay);
-	}
-}
-function blueListener() {
-	if (gameRunning) {
-		userSelected.push(blue);
-		if (!checker()) {
-			wrong.play();
-			removal();
-			return;
-		}
-		clickedFlash(blue);
-		if (userSelected.length === level) setTimeout(nextLevel, timeDelay);
-	}
-}
-function yellowListener() {
-	if (gameRunning) {
-		userSelected.push(yellow);
-		if (!checker()) {
-			wrong.play();
-			removal();
-			return;
-		}
-		clickedFlash(yellow);
-		if (userSelected.length === level) setTimeout(nextLevel, timeDelay);
-	}
 }
