@@ -30,28 +30,22 @@ let userSelected = [];
 
 let gameRunning = false;
 
-function removal() {
-	buttons[red].removeEventListener('click', redListener);
-	buttons[green].removeEventListener('click', greenListener);
-	buttons[blue].removeEventListener('click', blueListener);
-	buttons[yellow].removeEventListener('click', yellowListener);
-
+function over() {
 	gameHeading.innerHTML = `<h1>Game Over</h1><h6>You scored: ${level}</h6>`;
 	document.body.append(playAgain);
 }
 
 const timeDelay = 300;
 function listener(event, color) {
-	console.log('clicked');
 	if (gameRunning) {
 		userSelected.push(color);
 		if (!checker()) {
 			wrong.play();
-			removal();
+			over();
 			return;
 		}
 		clickedFlash(color);
-		if (userSelected.length === level) setTimeout(nextLevel, timeDelay);
+		if (userSelected.length === level) setTimeout(levelLogic, timeDelay);
 	}
 }
 
@@ -78,7 +72,7 @@ function levelLogic() {
 }
 
 window.addEventListener('keydown', () => {
-	if (!gameRunning) levelLogic();
+	if (!gameRunning) setTimeout(levelLogic, 300);
 });
 
 function clickedFlash(color) {
