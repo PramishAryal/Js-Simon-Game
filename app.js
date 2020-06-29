@@ -35,7 +35,7 @@ function over() {
 	document.body.append(playAgain);
 }
 
-const timeDelay = 300;
+const timeDelay = 500;
 function listener(event, color) {
 	if (gameRunning) {
 		userSelected.push(color);
